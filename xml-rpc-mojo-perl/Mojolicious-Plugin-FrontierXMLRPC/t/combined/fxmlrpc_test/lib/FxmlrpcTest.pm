@@ -1,40 +1,40 @@
 package FxmlrpcTest;
 use Mojo::Base 'Mojolicious';
+use Data::Dumper;
+
+my $log = Mojo::Log->new;
 
 #XMLRPC コールバック
 sub callback {
     (my $req,my $res)=@_;
 
-    print STDOUT "This is callback\n";
-
-    print Dumper($req);
-    print Dumper($res);
-
+    $log->info(Dumper($req));
+    $log->info(Dumper($res));
 }
 
 # This method will run once at server start
 sub startup {
-  my $self = shift;
+    my $self = shift;
 
-  #外部メソッド名と内部関数の紐付け設定
-  my $methods = { 'xml.rpctestplus' => \&xmlrpcplus
+    #外部メソッド名と内部関数の紐付け設定
+    my $methods = { 'xml.rpctestplus' => \&xmlrpcplus
             , 'xml.rpctestminus' => \&xmlrpcminus
             , 'xml.rpctestmixed' => \&xmlrpcmixed
 	};
 
-  #プラグインへのパラメータ
-  my $xconf = {
-	methods=>$methods,
-    callback=>\&callback,
-  };
+    #プラグインへのパラメータ
+    my $xconf = {
+	    methods=>$methods,
+        cb=>\&callback,
+    };
 
-  $self->plugin('Mojolicious::Plugin::FrontierXMLRPC',$xconf);
+    $self->plugin('Mojolicious::Plugin::FrontierXMLRPC', $xconf);
 
 }
 
 #API
 sub xmlrpcplus {
-   (my $a , my $b) = @_;
+    (my $a , my $b) = @_;
 
     return $a + $b;
 }
