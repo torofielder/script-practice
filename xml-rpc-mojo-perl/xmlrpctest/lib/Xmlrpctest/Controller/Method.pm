@@ -1,4 +1,4 @@
-package Xmlrpctest::Method;
+package Xmlrpctest::Controller::Method;
 use Mojo::Base 'Mojolicious::Controller';
 
 use Mojo::Home;
